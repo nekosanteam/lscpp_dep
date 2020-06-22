@@ -5,7 +5,8 @@
 // This component defines 1 fully insulated iterator class:
 //   idep_TokenIter: iterate over the tokens in an input stream
 
-class istream;
+#include <istream>
+//class istream;
 
 class idep_TokenIter_i;
 class idep_TokenIter {
@@ -17,7 +18,7 @@ class idep_TokenIter {
 
   public:
     // CREATORS
-    idep_TokenIter(istream& in);
+    idep_TokenIter(std::istream& in);
         // Create a token iterator for the specified stream.  A "token" is 
         // either a newline ('\n') or a "word" consisting of a contiguous 
         // sequence of non-white-space characters.  The stream object must

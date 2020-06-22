@@ -6,9 +6,10 @@
 //       idep_AliasTable: supports efficient (hashed) name to name mapping
 //   idep_AliasTableIter: iterate through the collection of name mappings
 
+#include <ostream>
 class idep_AliasTableLink;
 class idep_AliasTableIter;
-class ostream;
+//class std::ostream;
 
 class idep_AliasTable {
     idep_AliasTableLink **d_table_p;            // hash table
@@ -38,7 +39,7 @@ class idep_AliasTable {
         // Return the original name if the alias exists, else 0.
 };
         
-ostream& operator<<(ostream& output, const idep_AliasTable& table);
+std::ostream& operator<<(std::ostream& output, const idep_AliasTable& table);
     // Write the entire logical contents of the specified alias table in some 
     // reasonable format to the specified output stream.
         
@@ -76,5 +77,3 @@ class idep_AliasTableIter {
 };
 
 #endif
-
-

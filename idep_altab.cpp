@@ -3,11 +3,13 @@
 
 #include <string.h>     // strcmp() strlen()
 #include <memory.h>     // memcpy()
-#include <iostream.h> 
+#include <iostream> 
 #include <assert.h> 
 
                 // -*-*-*- static functions -*-*-*-
- 
+using std::ostream;
+using std::endl;
+
 enum { DEFAULT_TABLE_SIZE = 521 };
 
 static unsigned hash(register const char* name) // Note: returns unsigned!
@@ -112,7 +114,8 @@ const char *idep_AliasTable::lookup(const char *alias) const
 ostream& operator<<(ostream &o, const idep_AliasTable& table) 
 {
     int fieldWidth = 0; 
-    for (idep_AliasTableIter it(table); it; ++it) {
+    idep_AliasTableIter it(table);
+    for (; it; ++it) {
         int len = strlen(it.alias());
         if (fieldWidth < len) {
             fieldWidth = len;

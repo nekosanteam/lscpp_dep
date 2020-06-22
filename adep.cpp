@@ -1,6 +1,11 @@
 // adep.c
 #include "idep_aliasdep.h"
-#include <iostream.h>
+#include <iostream>
+
+using std::ostream;
+using std::cout;
+using std::cerr;
+using std::endl;
 
 // This file contains a main program to exercise the idep_aliasdep component.
 
@@ -38,12 +43,12 @@ return NL
 NL;
 }
 
-static enum { IOERROR = -1, GOOD = 0, BAD = 1 } s_status = GOOD;
+static enum { IOERROR = -1, GOOD = 0, BAD = 1 } s_status;
 
 static ostream& err() 
 {
     s_status = IOERROR;
-    return cerr << "Error: ";
+    return std::cerr << "Error: ";
 }
 
 static int missing(const char *argName, char option) 
@@ -74,13 +79,13 @@ static int incorrect(const char *file, char option)
     return s_status;
 }
 
-static const char *getArg(int *i, int argc, const char *argv[])
+static const char *getArg(int *i, int argc, char *argv[])
 {
     return 0 != argv[*i][2] ? argv[*i] + 2 :
            ++*i >= argc || '-' == argv[*i][0] ? "" : argv[*i];
 }
 
-main (int argc, char *argv[]) 
+int main (int argc, char *argv[]) 
 {
     int argCount = 0;        // record the number of files on the command line
     int fileFlag = 0;        // -f<file> sets this to 1
@@ -88,6 +93,7 @@ main (int argc, char *argv[])
     int verifyFlag = 0;      // -v sets this to 1
     int extractFlag = 0;     // -e sets this to 1
     
+    s_status = GOOD;
     idep_AliasDep environment;
     for (int i = 1; i < argc; ++i) {
         const char *word = argv[i];
@@ -180,4 +186,3 @@ main (int argc, char *argv[])
 
     return s_status;
 }
-

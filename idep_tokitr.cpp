@@ -3,8 +3,10 @@
 
 #include <ctype.h>      // isspace()
 #include <memory.h>     // memcpy()
-#include <iostream.h>
+#include <iostream>
 #include <assert.h> 
+
+using std::istream;
 
                 // -*-*-*- static functions -*-*-*-
 

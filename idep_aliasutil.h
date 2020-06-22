@@ -5,14 +5,16 @@
 // This component defines 1 procedural utility class:
 //   idep_AliasUtil: load an alias table with information read from a file
 
+#include <istream>
+#include <ostream>
 class idep_AliasTable;
-class ostream;
-class istream;
+//class std::ostream;
+//class std::istream;
 
 struct idep_AliasUtil {
-    static int readAliases(idep_AliasTable *table, ostream& err, istream& in,
+    static int readAliases(idep_AliasTable *table, std::ostream& err, std::istream& in,
                                                        const char *inputName);
-    static int readAliases(idep_AliasTable *table, ostream& err, 
+    static int readAliases(idep_AliasTable *table, std::ostream& err, 
                                                        const char *file);
         // Read a description of aliases from a specified stream or file 
         // and load this information into the specified alias table.
@@ -64,4 +66,3 @@ struct idep_AliasUtil {
 };
 
 #endif
-        

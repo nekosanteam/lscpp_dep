@@ -5,7 +5,8 @@
 // This leaf component defines 1 class:
 //   idep_NameDep: extensible array of managed character string names.
 
-class ostream;
+#include <ostream>
+//class std::ostream;
 
 class idep_NameArray {
     char **d_array_p;   // array of dynamically allocated character strings
@@ -44,7 +45,7 @@ class idep_NameArray {
         // Return the number of names currently stored in this array.  
 };
 
-ostream& operator<<(ostream& out, const idep_NameArray& array);
+std::ostream& operator<<(std::ostream& out, const idep_NameArray& array);
     // Print the logical contents of this name array to the specified
     // output stream (out) in some suitable format. 
 

@@ -1,6 +1,11 @@
 // cdep.c
 #include "idep_compiledep.h"
-#include <iostream.h>
+#include <iostream>
+
+using std::ostream;
+using std::cout;
+using std::cerr;
+using std::endl;
 
 // This file contains a main program to exercise the idep_compiledep component.
 
@@ -29,7 +34,7 @@ return NL
 NL;
 }
 
-static enum { IOERROR = -1, GOOD = 0 } s_status = GOOD;
+static enum { IOERROR = -1, GOOD = 0 } s_status;
 
 static ostream& err() 
 {
@@ -58,17 +63,19 @@ static int unreadable(const char *dirFile, char option)
     return s_status;
 }
 
-static const char *getArg(int *i, int argc, const char *argv[]) 
+static const char *getArg(int *i, int argc, char *argv[]) 
 {
     return 0 != argv[*i][2] ? argv[*i] + 2 : 
            ++*i >= argc || '-' == argv[*i][0] ? "" : argv[*i];
 }
 
-main (int argc, char *argv[]) 
+int main (int argc, char *argv[]) 
 {
     int argCount = 0;        // record the number of files on the command line
     int fileFlag = 0;        // -f<file> sets this to 1
     int recursionFlag = 1;   // -x sets this to 0
+
+    s_status = GOOD;
     idep_CompileDep environment;
     for (int i = 1; i < argc; ++i) {
         const char *word = argv[i];

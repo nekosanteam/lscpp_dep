@@ -4,29 +4,34 @@
 #include "idep_tokeniter.h"
 #include "idep_string.h"
 
-#include <fstream.h>   // ifstream
-#include <iostream.h>
+#include <fstream>   // ifstream
+#include <iostream>
 #include <assert.h> 
 
                 // -*-*-*- static functions -*-*-*-
 
-static ostream& warning(ostream& or, const char *file, int lineno)
+using std::istream;
+using std::ifstream;
+using std::ostream;
+using std::endl;
+
+static ostream& warning(ostream& orr, const char *file, int lineno)
 {
-    return or << "Warning in " << file << '(' << lineno << "): ";
+    return orr << "Warning in " << file << '(' << lineno << "): ";
 }
  
-static ostream& err(ostream& or, const char *file, int lineno)
+static ostream& err(ostream& orr, const char *file, int lineno)
 {
-    return or << "Error in " << file << '(' << lineno << "): ";
+    return orr << "Error in " << file << '(' << lineno << "): ";
 }
 
-static int tryToAlias(idep_AliasTable *table, ostream& or, 
+static int tryToAlias(idep_AliasTable *table, ostream& orr, 
                       const char *inputName, int lineno, 
                       const char *componentName, const char *alias)
 {
     if (table->add(alias, componentName) < 0) {
         const char *previousName = table->lookup(alias);
-        err(or, inputName, lineno) << "two names for alias \"" 
+        err(orr, inputName, lineno) << "two names for alias \"" 
             << alias << "\":" << endl << "    \"" << previousName
             << "\" and \"" << componentName << "\"" << endl;
         return 1;
@@ -36,7 +41,7 @@ static int tryToAlias(idep_AliasTable *table, ostream& or,
 
                 // -*-*-*- idep_AliasUtil -*-*-*-
 
-int idep_AliasUtil::readAliases(idep_AliasTable *table, ostream& or, 
+int idep_AliasUtil::readAliases(idep_AliasTable *table, ostream& orr, 
                                         istream& in, const char *inputName)
 {
     // The following is a state-machine description of the alias language:
@@ -143,32 +148,32 @@ int idep_AliasUtil::readAliases(idep_AliasTable *table, ostream& or,
           } break;
           case BEG_PRE: {
             componentName = lastToken;
-            warning(or, inputName, lineno) << '"' << lastToken 
+            warning(orr, inputName, lineno) << '"' << lastToken 
                 << "\" << used as component name." << endl;
           } break;
           case BEG_PRE_CUR: {
             componentName = lastToken;
-            numBadAliases += tryToAlias(table, or, inputName, lineno,
+            numBadAliases += tryToAlias(table, orr, inputName, lineno,
                                                         componentName, it());
-            warning(or, inputName, lineno) << '"' << lastToken 
+            warning(orr, inputName, lineno) << '"' << lastToken 
                 << "\" << used as component name." << endl;
           } break;
           case TRY_CUR: {
-            numBadAliases += tryToAlias(table, or, inputName, lineno,
+            numBadAliases += tryToAlias(table, orr, inputName, lineno,
                                                         componentName, it());
           } break;
           case TRY_PRE: {
-            numBadAliases += tryToAlias(table, or, inputName, lineno,
+            numBadAliases += tryToAlias(table, orr, inputName, lineno,
                                                    componentName, lastToken);
-            warning(or, inputName, lineno) << '"' << lastToken 
+            warning(orr, inputName, lineno) << '"' << lastToken 
                 << "\" << used as alias name." << endl;
           } break;
           case TRY_PRE_CUR: {
-            numBadAliases += tryToAlias(table, or, inputName, lineno,
+            numBadAliases += tryToAlias(table, orr, inputName, lineno,
                                                    componentName, lastToken);
-            numBadAliases += tryToAlias(table, or, inputName, lineno,
+            numBadAliases += tryToAlias(table, orr, inputName, lineno,
                                                         componentName, it());
-            warning(or, inputName, lineno) << '"' << lastToken 
+            warning(orr, inputName, lineno) << '"' << lastToken 
                 << "\" << used as alias name." << endl;
           } break;
           case END: {
@@ -196,14 +201,14 @@ int idep_AliasUtil::readAliases(idep_AliasTable *table, ostream& or,
 }
 
 
-int idep_AliasUtil::readAliases(idep_AliasTable *table, ostream& or, 
+int idep_AliasUtil::readAliases(idep_AliasTable *table, ostream& orr, 
                                                         const char *fileName)
 {
     enum { IOERROR = -1 };
-    ifstream in(fileName);
-    if (!in) {
+    ifstream inn(fileName);
+    if (!inn) {
         return IOERROR;
     }
-    return readAliases(table, or, in, fileName);
+    return readAliases(table, orr, inn, fileName);
 }
    

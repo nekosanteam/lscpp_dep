@@ -4,8 +4,11 @@
 
 #include <string.h>     // strcmp() 
 #include <memory.h>     // memcpy() memset()
-#include <iostream.h> 
+#include <iostream> 
 #include <assert.h> 
+
+using std::ostream;
+using std::endl;
 
                 // -*-*-*- static functions -*-*-*-
 

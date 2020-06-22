@@ -4,8 +4,12 @@
 #include <ctype.h>      // isspace()
 #include <string.h>     // strcspn()
 #include <memory.h>     // memcpy()
-#include <fstream.h>    // ifstream
+#include <fstream>    // ifstream
 #include <assert.h> 
+
+using std::istream;
+using std::ifstream;
+using std::ios;
 
                 // -*-*-*- static functions -*-*-*-
 
@@ -157,7 +161,7 @@ void idep_FileDepIter::operator++()
     };
 }    
 
-idep_FileDepIter::isValidFile() const 
+int idep_FileDepIter::isValidFile() const 
 { 
     return d_this->d_isValidFile;
 }

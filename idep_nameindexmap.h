@@ -5,7 +5,8 @@
 // This component defines 1 fully insulated class:
 //   idep_NameIndexMap: efficient two-way mapping between strings and indices
 
-class ostream;
+#include <ostream>
+//class std::ostream;
 
 class idep_NameIndexMap_i;
 class idep_NameIndexMap {
@@ -44,7 +45,7 @@ class idep_NameIndexMap {
         // Return the index of the specified name, or -1 if not found.
 };
 
-ostream& operator<<(ostream& out, const idep_NameIndexMap& map);
+std::ostream& operator<<(std::ostream& out, const idep_NameIndexMap& map);
         // Print the logical contents of this mapping to the specified
         // output stream (out) in some reasonable format.
         

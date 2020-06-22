@@ -9,15 +9,21 @@
 
 #include <ctype.h>      // isascii() isspace()
 #include <string.h>     // strlen()
-#include <fstream.h>    // ifstream
-#include <iostream.h>   
+#include <fstream>    // ifstream
+#include <iostream>   
 #include <assert.h>
+
+using std::istream;
+using std::ifstream;
+using std::ostream;
+using std::cin;
+using std::endl;
 
                 // -*-*-*- static functions -*-*-*-
 
-static ostream& err(ostream& or) 
+static ostream& err(ostream& orr) 
 {
-    return or << "Error: ";
+    return orr << "Error: ";
 }
 
 static const char *stripDotSlash(const char *originalPath)
@@ -130,7 +136,8 @@ static int getDep (int index)
      
     idep_String buffer; // string buffer, do not use directly
 
-    for (idep_FileDepIter it((*s_files_p)[index]); it; ++it) {
+    idep_FileDepIter it((*s_files_p)[index]);
+    for (; it; ++it) {
         const char *dirFile = search(&buffer, *s_includes_p, it());
         if (!dirFile) {
             err(*s_err_p) << "include directory for file \""
@@ -222,7 +229,7 @@ void idep_CompileDep::addIncludeDirectory(const char *dirName)
 
 int idep_CompileDep::readIncludeDirectories(const char *file)
 {
-    return loadFromFile(file, this, idep_CompileDep::addIncludeDirectory); 
+    return loadFromFile(file, this, &idep_CompileDep::addIncludeDirectory); 
 }
 
 void idep_CompileDep::addRootFile(const char *fileName)
@@ -232,18 +239,18 @@ void idep_CompileDep::addRootFile(const char *fileName)
 
 int idep_CompileDep::readRootFiles(const char *file)
 {
-    return loadFromFile(file, this, idep_CompileDep::addRootFile); 
+    return loadFromFile(file, this, &idep_CompileDep::addRootFile); 
 }
 
 void idep_CompileDep::inputRootFiles()
 {
     if (cin) {
-        loadFromStream(cin, this, idep_CompileDep::addRootFile); 
-        cin.clear(0);             // reset eof for standard input
+        loadFromStream(cin, this, &idep_CompileDep::addRootFile); 
+        cin.clear();             // reset eof for standard input
     }
 }
 
-int idep_CompileDep::calculate(ostream& or, int recursionFlag)
+int idep_CompileDep::calculate(ostream& orr, int recursionFlag)
 {
     enum { BAD = -1, GOOD = 0 } status = GOOD;
 
@@ -265,12 +272,12 @@ int idep_CompileDep::calculate(ostream& or, int recursionFlag)
         const char *dirFile = search(&s, d_this->d_includeDirectories, file);
 
         if (!dirFile) {
-            err(or) << "root file \"" << file 
+            err(orr) << "root file \"" << file 
                     << "\" not found." << endl;
             status = BAD;
         }
         else if (d_this->d_fileNames_p->add(dirFile) < 0) { 
-            err(or) << "root file \"" << file 
+            err(orr) << "root file \"" << file 
                     << "\" redundantly specified." << endl;
             status = BAD;
         }
@@ -288,16 +295,16 @@ int idep_CompileDep::calculate(ostream& or, int recursionFlag)
     s_files_p = d_this->d_fileNames_p;
     s_includes_p = &d_this->d_includeDirectories;
     s_recurse = recursionFlag;
-    s_err_p = &or;
+    s_err_p = &orr;
 
     // Each translation unit forms the root of a tree of dependencies.
     // We will visit each node only once, recording the results as we go.
     // Initially, only the translation units are present in the relation.
 
-    for (i = 0; i < d_this->d_numRootFiles; ++i) {
+    for (int i = 0; i < d_this->d_numRootFiles; ++i) {
         const char *name = (*d_this->d_fileNames_p)[i];
         if (getDep(i)) {
-            err(or) << "could not determine all dependencies for \""
+            err(orr) << "could not determine all dependencies for \""
                     << name << "\"." << endl;
             status = BAD;
         }
@@ -429,4 +436,3 @@ const char *idep_HeaderFileIter::operator()() const
 {
     return (*d_this->d_iter.d_dep.d_fileNames_p)[d_this->d_index];
 }
-

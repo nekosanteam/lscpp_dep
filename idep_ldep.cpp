@@ -12,10 +12,19 @@
 #include <ctype.h>      // isascii() isspace()
 #include <string.h>     // strchr() strrchr() strlen() strcmp()
 #include <memory.h>     // memcpy() memset()
-#include <fstream.h>    // ifstream
-#include <strstream.h>  // ostrstream
-#include <iostream.h>   
+#include <fstream>    // ifstream
+#include <strstream>  // ostrstream
+#include <iostream>   
 #include <assert.h>
+
+using std::istream;
+using std::ifstream;
+using std::ostream;
+using std::ostrstream;
+using std::cin;
+using std::endl;
+using std::ends;
+using std::ios;
 
                 // -*-*-*- static functions -*-*-*-
 
@@ -24,9 +33,9 @@ static ostream& warn(ostream& ing, int index)
     return ing << "Warning<" << index << ">: "; // '<' and '>' match cycle  
 }
 
-static ostream& err(ostream& or) 
+static ostream& err(ostream& orr) 
 {
-    return or << "Error: ";
+    return orr << "Error: ";
 }
 
 static const char *stripDotSlash(const char *originalPath)
@@ -124,7 +133,7 @@ struct idep_LinkDep_i {
     int entry(const char *name, int suffixFlag);
     void loadDependencies(istream& in, int suffixFlag);
     void createCycleArray();
-    int calculate(ostream& or, int canonicalFlag, int suffixFlag);
+    int calculate(ostream& orr, int canonicalFlag, int suffixFlag);
 };
 
 idep_LinkDep_i::idep_LinkDep_i() 
@@ -256,8 +265,11 @@ void idep_LinkDep_i::createCycleArray()
 
     // Members of each cycle are identified by the index of their first member.
 
-    enum { NO_CYCLE = -1 };                 
-    for (int i = 0; i < d_numComponents; ++i) {  
+    enum { NO_CYCLE = -1 };
+    int i;
+    int j;
+
+    for (i = 0; i < d_numComponents; ++i) {  
         d_cycles_p[i] = NO_CYCLE;       // Initially each entry is invalid. 
         d_weights_p[i] = 0;             // Initially weight of each cycle is 0.
         d_cycleIndices_p[i] = NO_CYCLE; // Initially each entry is invalid. 
@@ -285,7 +297,7 @@ void idep_LinkDep_i::createCycleArray()
         }
         int cycleFound = 0;
         d_cycles_p[i] = i;          // first component in potential cycle
-        for (int j = i + 1; j < d_numComponents; ++j) {
+        for (j = i + 1; j < d_numComponents; ++j) {
             if (d_cycles_p[j] >= 0) {
                 continue;           // part of a previously reported cycle
             }
@@ -315,7 +327,7 @@ void idep_LinkDep_i::createCycleArray()
     }
 }
 
-int idep_LinkDep_i::calculate(ostream& or, int canonicalFlag, int suffixFlag)
+int idep_LinkDep_i::calculate(ostream& orr, int canonicalFlag, int suffixFlag)
 {
     enum { IOERRR = -1 };
 
@@ -345,10 +357,12 @@ int idep_LinkDep_i::calculate(ostream& or, int canonicalFlag, int suffixFlag)
     // Now try to read dependencies from specified set of files.
     // If an I/O error occurs, abort; otherwise keep on processing.
 
-    for (int i = 0; i < d_dependencyFiles.length(); ++i) {
+    int i;
+    int j;
+    for (i = 0; i < d_dependencyFiles.length(); ++i) {
         const int INSANITY = 1000;
         if (d_dependencies_p->length() > INSANITY) {
-            or << "SANITY CHECK: Number of components is currently " 
+            orr << "SANITY CHECK: Number of components is currently " 
                << d_dependencies_p->length() << " !!!!" << endl;
 
         }
@@ -357,12 +371,12 @@ int idep_LinkDep_i::calculate(ostream& or, int canonicalFlag, int suffixFlag)
 
         if ('\0' == *file) {
             loadDependencies(cin, suffixFlag);
-            cin.clear(0);         // reset eof for standard input
+            cin.clear();         // reset eof for standard input
         }
         else {
             ifstream in(file);
             if (!in) {
-                err(or) << "dependency file \"" << file 
+                err(orr) << "dependency file \"" << file 
                         << "\" not found." << endl;
                 return IOERROR;
             }
@@ -442,7 +456,7 @@ int idep_LinkDep_i::calculate(ostream& or, int canonicalFlag, int suffixFlag)
 
     for (i = 0; i < d_numComponents; ++i) {
         if (d_cycles_p[i] == i) {
-            for (int j = i + 1; j < d_numComponents; ++j) {
+            for (j = i + 1; j < d_numComponents; ++j) {
                 if (d_cycles_p[j] == i) {
                     assert(d_dependencies_p->get(i,j));
                     d_dependencies_p->clr(i,j); // strip cyclic dependency
@@ -477,7 +491,7 @@ int idep_LinkDep_i::calculate(ostream& or, int canonicalFlag, int suffixFlag)
         int componentCount = 0;         // number of components on this level
         memset(current, 0, d_numComponents); // initially current level empty
         
-        for (int i = 0; i < d_numComponents; ++i) {
+        for (i = 0; i < d_numComponents; ++i) {
             if (d_cycles_p[i] >= 0 && d_cycles_p[i] != i) {
                 continue;   // component is non principal member of a cycle
             }
@@ -497,7 +511,7 @@ int idep_LinkDep_i::calculate(ostream& or, int canonicalFlag, int suffixFlag)
 
             int searchLevel = d_numLevels + 1 - weight; // allowed dependencies
 
-            for (int j = 0; j < d_numComponents; ++j) {
+            for (j = 0; j < d_numComponents; ++j) {
                 if (i == j) {
                     continue;
                 }
@@ -539,7 +553,7 @@ int idep_LinkDep_i::calculate(ostream& or, int canonicalFlag, int suffixFlag)
 
     for (i = 0; i < d_numLevels; ++i) {
         int top = start + d_levels_p[i];
-        for (int j = start; j < top; ++j) {
+        for (j = start; j < top; ++j) {
             d_levelNumbers_p[d_map_p[j]] = i;
         }
         start = top;
@@ -550,7 +564,8 @@ int idep_LinkDep_i::calculate(ostream& or, int canonicalFlag, int suffixFlag)
     // differences as software is modified (e.g., via the Unix diff command).
 
     start = 0;
-    for (int k = 0; k < d_numLevels; ++k) {
+    int k;
+    for (k = 0; k < d_numLevels; ++k) {
         int top = start + d_levels_p[k];
         for (int i = start + 1; i < top; ++i) {
             for (int j = start; j < i; ++j) {
@@ -710,9 +725,9 @@ const char *idep_LinkDep::addAlias(const char *alias, const char *component)
                                         d_this->d_aliases.lookup(alias) : 0;
 }
 
-int idep_LinkDep::readAliases(ostream& or, const char *file)
+int idep_LinkDep::readAliases(ostream& orr, const char *file)
 {
-    return idep_AliasUtil::readAliases(&d_this->d_aliases, or, file);
+    return idep_AliasUtil::readAliases(&d_this->d_aliases, orr, file);
 }
 
 void idep_LinkDep::addUnaliasDirectory(const char *dirName)
@@ -757,9 +772,9 @@ int idep_LinkDep::readUnaliasDirectories(const char *file)
     return GOOD;
 }
 
-int idep_LinkDep::calculate(ostream& or, int canonicalFlag, int suffixFlag)
+int idep_LinkDep::calculate(ostream& orr, int canonicalFlag, int suffixFlag)
 {
-    return d_this->calculate(or, canonicalFlag, suffixFlag);
+    return d_this->calculate(orr, canonicalFlag, suffixFlag);
 }
 
 int idep_LinkDep::numComponents() const
@@ -910,7 +925,8 @@ void idep_LinkDep::printLevels(ostream& o, int longFlag, int supressFlag) const
                 f << CY_LT << cit.cycle() << CY_RT << ends;
                 o.width(cycleFieldWidth);
                 if (cit.cycle()) {
-                    long int oldState = o.flags();
+                    //long int oldState = o.flags();
+                    std::ios_base::fmtflags oldState = o.flags();
                     o.setf(ios::left, ios::adjustfield);
                     o << field;
                     o.flags(oldState);
@@ -961,7 +977,8 @@ inline const char *s(int n) { return (n == 1) ? "" : "s"; }
 
 void idep_LinkDep::printSummary(ostream& o) const
 {
-    long iostate = o.setf(ios::left, ios::adjustfield);
+    //long iostate = o.setf(ios::left, ios::adjustfield);
+    std::ios_base::fmtflags iostate = o.setf(std::ios::left, std::ios::adjustfield);
     const int FIELD_BUFFER_SIZE = 100;   // Not completely arbitrary -- this
     char field[FIELD_BUFFER_SIZE];       // size will be always big enough!
     o << "SUMMARY:" << endl;

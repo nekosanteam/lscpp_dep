@@ -1,6 +1,11 @@
 // ldep.c
 #include "idep_linkdep.h"
-#include <iostream.h>
+#include <iostream>
+
+using std::ostream;
+using std::cout;
+using std::cerr;
+using std::endl;
 
 // This file contains a main program to exercise the idep_linkdep component.
 
@@ -69,13 +74,13 @@ static int incorrect(const char *file, char option)
     return s_status;
 }
 
-static const char *getArg(int *i, int argc, const char *argv[])
+static const char *getArg(int *i, int argc, char *argv[])
 {
     return 0 != argv[*i][2] ? argv[*i] + 2 :
            ++*i >= argc || '-' == argv[*i][0] ? "" : argv[*i];
 }
 
-main (int argc, char *argv[]) 
+int main (int argc, char *argv[]) 
 {
     int fileFlag = 0;        // -d<file> sets this to 1
     int longListingFlag = 0; // both -l and -L set this to 1

@@ -3,8 +3,11 @@
 
 #include <memory.h>     // memcpy()
 #include <string.h>     // strlen()
-#include <iostream.h>
+#include <iostream>
 #include <assert.h>
+
+using std::ostream;
+using std::endl;
 
                 // -*-*-*- static functions -*-*-*-
  

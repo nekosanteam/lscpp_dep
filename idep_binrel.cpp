@@ -2,8 +2,11 @@
 #include "idep_binrel.h"
 
 #include <memory.h>     // memcpy() memset() memcmp()
-#include <iostream.h>
+#include <iostream>
 #include <assert.h>
+
+using std::ostream;
+using std::endl;
 
 // IMPLEMENTATION NOTE: MEMORY LAYOUT
 // +---------+          +---------+             +---+---+---+---+
