@@ -12,15 +12,15 @@
 #include <ctype.h>      // isascii() isspace()
 #include <string.h>     // strchr() strrchr() strlen() strcmp()
 #include <memory.h>     // memcpy() memset()
-#include <fstream>    // ifstream
-#include <strstream>  // ostrstream
+#include <fstream>      // ifstream
+#include <sstream>      // stringstream
 #include <iostream>   
 #include <assert.h>
 
 using std::istream;
 using std::ifstream;
 using std::ostream;
-using std::ostrstream;
+using std::ostringstream;
 using std::cin;
 using std::endl;
 using std::ends;
@@ -920,15 +920,14 @@ void idep_LinkDep::printLevels(ostream& o, int longFlag, int supressFlag) const
             o << cit();
 
             if (numCycles() > 0 && !supressFlag) {
-                char field[100]; // will always be large enough
-                ostrstream f(field, sizeof field);
+                ostringstream f;
                 f << CY_LT << cit.cycle() << CY_RT << ends;
                 o.width(cycleFieldWidth);
                 if (cit.cycle()) {
                     //long int oldState = o.flags();
                     std::ios_base::fmtflags oldState = o.flags();
                     o.setf(ios::left, ios::adjustfield);
-                    o << field;
+                    o << f.str();
                     o.flags(oldState);
                 }
                 else {
@@ -989,74 +988,74 @@ void idep_LinkDep::printSummary(ostream& o) const
 
     if (numCycles() > 0) {
         { 
-            ostrstream f(field, sizeof field);
+            ostringstream f;
             f.width(N);
             f << numCycles() << " Cycle" << s(numCycles()) << ends;
             o.width(W);
-            o << field;
+            o << f.str();
         }
         o.width(G);
         o << "";
         { 
-            ostrstream f(field, sizeof field);
+            ostringstream f;
             f.width(N);
             f << numMembers() << " Members" << ends;
             o.width(W);
-            o << field;
+            o << f.str();
         }
         o << endl;
     }
     { 
-        ostrstream f(field, sizeof field);
+        ostringstream f;
         f.width(N);
         f << numLocalComponents() << " Component" 
                                   << s(numLocalComponents()) << ends;
         o.width(W);
-        o << field;
+        o << f.str();
     }
     o.width(G);
     o << "";
     { 
-        ostrstream f(field, sizeof field);
+        ostringstream f;
         f.width(N);
         f << numLevels() << " Level" << s(numLevels()) << ends;
         o.width(W);
-        o << field;
+        o << f.str();
     }
     o.width(G);
     o << "";
     { 
-        ostrstream f(field, sizeof field);
+        ostringstream f;
         f.width(N);
         f << numPackages() << " Package" << s(numPackages()) << ends;
         o.width(W);
-        o << field;
+        o << f.str();
     }
     o << endl;
     { 
-        ostrstream f(field, sizeof field);
+        ostringstream f;
         f.width(N);
         f << ccd() << " CCD" << ends;
         o.width(W);
-        o << field;
+        o << f.str();
     }
     o.width(G);
     o << "";
     { 
-        ostrstream f(field, sizeof field);
+        ostringstream f;
         f.width(N);
         f << acd() << " ACD" << ends;
         o.width(W);
-        o << field;
+        o << f.str();
     }
     o.width(G);
     o << "";
     { 
-        ostrstream f(field, sizeof field);
+        ostringstream f;
         f.width(N);
         f << nccd() << " NCCD" << ends;
         o.width(W);
-        o << field;
+        o << f.str();
     }
     o << endl;
 

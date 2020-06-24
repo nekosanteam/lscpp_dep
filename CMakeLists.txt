@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.11)
 PROJECT(dep_utils CXX)
+set(C_STANDARD 11)
+set(CXX_STANDARD 14)
 
 add_library(idep OBJECT
   idep_adep.cpp

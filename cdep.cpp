@@ -13,24 +13,24 @@ using std::endl;
 static const char *help() 
 {
 return NL
-"cdep: Extract compile-time dependencies from a collection of files."        NL
-""                                                                           NL
-"  The following command line interface is supported:"                       NL
-""                                                                           NL
-"    cdep [-I<dir>] [-i<dirlist>] [-f<filelist>] [-x] <filename>*"           NL
-""                                                                           NL
-"      -I<dir>      Specify include directory to search."                    NL
-"      -i<dirlist>  Specify file containing a list of directories to search."NL
-"      -f<filelist> Specify file containing a list of files to process."     NL
-"      -x           Do _not_ check recursively for nested includes."         NL
-""                                                                           NL
-"    Each filename on the command line specifies a file to be considered for"NL
-"    processing.  Specifying no arguments indicates that the list of files"  NL
-"    is to come from standard input unless the -f option has been invoked."  NL
-""                                                                           NL
-"  TYPICAL USAGE:"                                                           NL
-""                                                                           NL
-"    cdep -iincludes *.[ch]"                                                 NL
+"cdep: Extract compile-time dependencies from a collection of files."         NL
+""                                                                            NL
+"  The following command line interface is supported:"                        NL
+""                                                                            NL
+"    cdep [-I<dir>] [-i<dirlist>] [-f<filelist>] [-x] <filename>*"            NL
+""                                                                            NL
+"      -I<dir>      Specify include directory to search."                     NL
+"      -i<dirlist>  Specify file containing a list of directories to search." NL
+"      -f<filelist> Specify file containing a list of files to process."      NL
+"      -x           Do _not_ check recursively for nested includes."          NL
+""                                                                            NL
+"    Each filename on the command line specifies a file to be considered for" NL
+"    processing.  Specifying no arguments indicates that the list of files"   NL
+"    is to come from standard input unless the -f option has been invoked."   NL
+""                                                                            NL
+"  TYPICAL USAGE:"                                                            NL
+""                                                                            NL
+"    cdep -iincludes *.[ch]"                                                  NL
 NL;
 }
 

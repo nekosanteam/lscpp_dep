@@ -13,33 +13,33 @@ using std::endl;
 static const char *help() 
 {
 return NL
-"adep - create aliases to group files into cohesive components."             NL
-""                                                                           NL
-"  The following 3 command line interface modes are supported:"              NL
-""                                                                           NL
-"    adep [-s] [-a<alias>] [-f<filelist> ] [-X<fn>] [-x<xFile>] <filename>*" NL
-"    adep -v [-a<alias>] [-f<filelist>] [-X<fn>] [-x<xFile>] <cfilename>*"   NL
-"    adep -e [-a<alias>] [-f<filelist>] [-X<fn>] [-x<xFile>] <cfilename>*"   NL
-""                                                                           NL
-"      -s           Suppress the printing of suffixes for unpaired names."   NL
-"      -v           Verify file contains component name as 1st dependency."  NL
-"      -e           Extract aliases using name of first dependency."         NL
-"      -a<alias>    Specify file containing component name aliases."         NL
-"      -f<filelist> Specify file containing a list of files to consider."    NL
-"      -X<fn>       Specify name of file to ignore during processing."       NL
-"      -x<xFile>    Specify file containing a list of filenames to ignore."  NL
-""                                                                           NL
-"    Each filename on the command line specifies a file to be considered for"NL
-"    processing.  Specifying no arguments indicates that the list of files"  NL
-"    is to come from standard input unless the -f option has been invoked."  NL
-""                                                                           NL
-"  TYPICAL USAGE:"                                                           NL
-""                                                                           NL
-"    adep -s *.[ch]                     // print unpaired files to stdout"   NL
-""                                                                           NL
-"    adep -v -aaliases *.c              // print #include errors to stderr"  NL
-""                                                                           NL
-"    adep -e *.c                        // print extracted aliases to stderr"NL
+"adep - create aliases to group files into cohesive components."              NL
+""                                                                            NL
+"  The following 3 command line interface modes are supported:"               NL
+""                                                                            NL
+"    adep [-s] [-a<alias>] [-f<filelist> ] [-X<fn>] [-x<xFile>] <filename>*"  NL
+"    adep -v [-a<alias>] [-f<filelist>] [-X<fn>] [-x<xFile>] <cfilename>*"    NL
+"    adep -e [-a<alias>] [-f<filelist>] [-X<fn>] [-x<xFile>] <cfilename>*"    NL
+""                                                                            NL
+"      -s           Suppress the printing of suffixes for unpaired names."    NL
+"      -v           Verify file contains component name as 1st dependency."   NL
+"      -e           Extract aliases using name of first dependency."          NL
+"      -a<alias>    Specify file containing component name aliases."          NL
+"      -f<filelist> Specify file containing a list of files to consider."     NL
+"      -X<fn>       Specify name of file to ignore during processing."        NL
+"      -x<xFile>    Specify file containing a list of filenames to ignore."   NL
+""                                                                            NL
+"    Each filename on the command line specifies a file to be considered for" NL
+"    processing.  Specifying no arguments indicates that the list of files"   NL
+"    is to come from standard input unless the -f option has been invoked."   NL
+""                                                                            NL
+"  TYPICAL USAGE:"                                                            NL
+""                                                                            NL
+"    adep -s *.[ch]                     // print unpaired files to stdout"    NL
+""                                                                            NL
+"    adep -v -aaliases *.c              // print #include errors to stderr"   NL
+""                                                                            NL
+"    adep -e *.c                        // print extracted aliases to stderr" NL
 NL;
 }
 
