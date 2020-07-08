@@ -33,16 +33,6 @@ static ostream& err(ostream& orr)
     return orr << "Error: ";
 }
 
-/*static const char *stripDotSlash(const char *originalPath)
-{
-    if (originalPath) {
-        while ('.' == originalPath[0] && '/' == originalPath[1]) {
-            originalPath += 2;
-        }
-    }
-    return originalPath;
-}*/
-
 static const char *stripDir(const char *s)
 {
     if (s) {

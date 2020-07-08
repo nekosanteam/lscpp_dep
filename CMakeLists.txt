@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD   14)
 set(CMAKE_CXX_EXTENSIONS OFF)
 PROJECT(dep_utils CXX)
 
-set(CMAKE_C_FLAGS   "-Wall -Wextra -pedantic -Wc++-compat -O2 ")
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Weffc++ -Wabi=2 -O2 ")
+set(CMAKE_C_FLAGS   "-Wall -Wextra -Wpedantic -Wc++-compat -O2 ")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Weffc++ -Wabi=2 -O2 ")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_library(idep OBJECT
