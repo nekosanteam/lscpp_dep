@@ -62,7 +62,7 @@ class idep_AliasTableIter {
     void reset();
         // Reset this iterator to the start of the iteration.
 
-    void operator++();
+    idep_AliasTableIter& operator++();
         // Advance state of iteration to next alias/originalName pair.
 
     // ACCESSORS

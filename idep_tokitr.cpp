@@ -26,6 +26,8 @@ struct idep_TokenIter_i {
     
     idep_TokenIter_i(istream& in);
     ~idep_TokenIter_i();
+    idep_TokenIter_i(const idep_TokenIter_i&) = delete;
+    idep_TokenIter_i& operator=(const idep_TokenIter_i&) = delete;
     void grow();
     void addChar(char ch);
     void advance();
@@ -79,7 +81,7 @@ idep_TokenIter::~idep_TokenIter()
     delete d_this;
 }
 
-void idep_TokenIter::operator++() 
+idep_TokenIter& idep_TokenIter::operator++() 
 { 
     assert(*this);
 
@@ -120,6 +122,7 @@ void idep_TokenIter::operator++()
     else { 
         d_this->d_length = -1;                     // or make iterator invalid
     }
+    return *this;
 }    
 
 

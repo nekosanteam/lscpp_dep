@@ -116,11 +116,15 @@ struct idep_FileDepIter_i {
     int d_isValidFile;
     
     idep_FileDepIter_i(const char *fileName);
+    ~idep_FileDepIter_i() = default;
+    idep_FileDepIter_i(const idep_FileDepIter_i&) = delete;
+    idep_FileDepIter_i& operator=(const idep_FileDepIter_i&) = delete;
 };
 
 idep_FileDepIter_i::idep_FileDepIter_i(const char *fileName)
 : d_file(fileName)
 , d_header_p(d_buf)             // buffer is not yet initialized
+, d_isValidFile(0)
 {
     d_isValidFile = !!d_file;   // depends on result of initialization
 }
@@ -151,14 +155,15 @@ void idep_FileDepIter::reset()
     ++*this; // load first occurrence
 }
 
-void idep_FileDepIter::operator++() 
+idep_FileDepIter& idep_FileDepIter::operator++() 
 { 
     d_this->d_header_p = 0;
     while (loadBuf(d_this->d_file, d_this->d_buf, sizeof d_this->d_buf) >= 0) {
-        if (d_this->d_header_p = extractDependency(d_this->d_buf)) { // `=' ok
+        if ((d_this->d_header_p = extractDependency(d_this->d_buf)) != 0) { // `=' ok
             break;
         }
     };
+    return *this;
 }    
 
 int idep_FileDepIter::isValidFile() const 

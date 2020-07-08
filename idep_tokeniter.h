@@ -26,7 +26,7 @@ class idep_TokenIter {
 
     ~idep_TokenIter();
 
-    void operator++();
+    idep_TokenIter& operator++();
         // Advance to next token (i.e., "word" or newline).  The behavior is 
         // undefined if the iteration state is not valid. 
 

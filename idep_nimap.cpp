@@ -63,6 +63,8 @@ struct idep_NameIndexMap_i {
         // create a map representation assuming the specified (max) size
 
     ~idep_NameIndexMap_i(); 
+    idep_NameIndexMap_i(const idep_NameIndexMap_i&) = delete;
+    idep_NameIndexMap_i& operator=(const idep_NameIndexMap_i&) = delete;
 
     idep_NameIndexMapLink *& findSlot(const char *name); 
         // find the appropriate slot for this name
@@ -73,6 +75,7 @@ struct idep_NameIndexMap_i {
 
 idep_NameIndexMap_i::idep_NameIndexMap_i(int size)
 : d_array(size)
+, d_table_p(nullptr)
 , d_tableSize(size > 0 ? size : DEFAULT_TABLE_SIZE)
 { 
     d_table_p = new idep_NameIndexMapLink *[d_tableSize];

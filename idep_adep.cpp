@@ -33,7 +33,7 @@ static ostream& err(ostream& orr)
     return orr << "Error: ";
 }
 
-static const char *stripDotSlash(const char *originalPath)
+/*static const char *stripDotSlash(const char *originalPath)
 {
     if (originalPath) {
         while ('.' == originalPath[0] && '/' == originalPath[1]) {
@@ -41,7 +41,7 @@ static const char *stripDotSlash(const char *originalPath)
         }
     }
     return originalPath;
-}
+}*/
 
 static const char *stripDir(const char *s)
 {
@@ -156,7 +156,16 @@ struct idep_AliasDep_i {
     idep_NameIndexMap d_ignoreNames;          // e.g., idep_compiledep.t.c
     idep_AliasTable d_aliases;                // e.g., my_inta -> my_intarray
     idep_NameIndexMap d_fileNames;            // files to be analyzed
+
+    idep_AliasDep_i();
 };
+
+idep_AliasDep_i::idep_AliasDep_i()
+: d_ignoreNames(0)
+, d_aliases(0)
+, d_fileNames(0)
+{
+}
 
                 // -*-*-*- idep_AliasDep -*-*-*-
 
@@ -284,7 +293,7 @@ int idep_AliasDep::unpaired(ostream& out, ostream& ing, int suffixFlag) const
                 int len = li < lj ? li : lj;    // min length
                 int cmp = strncmp(printNames[smap[i]], 
                                   printNames[smap[j]], len); 
-                swap = cmp < 0 || 0 == cmp && li > lj;  // longer first if tie
+                swap = ((cmp < 0) || ((0 == cmp) && (li > lj)));  // longer first if tie
             }
             if (swap) {                                 // swap if necessary
                 int tmp = smap[i];                

@@ -227,7 +227,7 @@ class idep_AliasIter {
     ~idep_AliasIter();
 
     // MANIPULATORS
-    void operator++(); 
+    idep_AliasIter& operator++(); 
 
     // ACCESSORS
     operator const void *() const; 
@@ -252,7 +252,7 @@ class idep_UnaliasIter {
     ~idep_UnaliasIter();
 
     // MANIPULATORS
-    void operator++(); 
+    idep_UnaliasIter& operator++(); 
 
     // ACCESSORS
     operator const void *() const; 
@@ -276,7 +276,7 @@ class idep_CycleIter {
     ~idep_CycleIter();
 
     // MANIPULATORS
-    void operator++(); 
+    idep_CycleIter& operator++(); 
 
     // ACCESSORS
     operator const void *() const; 
@@ -301,7 +301,7 @@ class idep_MemberIter {
     ~idep_MemberIter();
 
     // MANIPULATORS
-    void operator++(); 
+    idep_MemberIter& operator++(); 
 
     // ACCESSORS
     operator const void *() const; 
@@ -325,7 +325,7 @@ class idep_LevelIter {
     ~idep_LevelIter();
 
     // MANIPULATORS
-    void operator++(); 
+    idep_LevelIter& operator++(); 
 
     // ACCESSORS
     operator const void *() const; 
@@ -349,7 +349,7 @@ class idep_ComponentIter {
     ~idep_ComponentIter();
 
     // MANIPULATORS
-    void operator++(); 
+    idep_ComponentIter& operator++(); 
 
     // ACCESSORS
     operator const void *() const; 
@@ -374,7 +374,7 @@ class idep_DependencyIter {
     ~idep_DependencyIter();
 
     // MANIPULATORS
-    void operator++(); 
+    idep_DependencyIter& operator++(); 
 
     // ACCESSORS
     operator const void *() const; 

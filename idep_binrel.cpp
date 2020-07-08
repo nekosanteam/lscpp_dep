@@ -86,7 +86,8 @@ void idep_BinRel::compress()
                 // -*-*-*- public functions -*-*-*-
 
 idep_BinRel::idep_BinRel(int initialEntries, int maxEntriesHint) 
-: d_size(maxEntriesHint > 0 ? maxEntriesHint : START_SIZE) 
+: d_rel_p(nullptr)
+, d_size(maxEntriesHint > 0 ? maxEntriesHint : START_SIZE) 
 , d_length(initialEntries > 0 ? initialEntries : 0)
 {
     if (d_size < d_length) {
@@ -97,9 +98,9 @@ idep_BinRel::idep_BinRel(int initialEntries, int maxEntriesHint)
 }
 
 idep_BinRel::idep_BinRel(const idep_BinRel& rel) 
-: d_size(rel.d_size)
+: d_rel_p(alloc(rel.d_size))
+, d_size(rel.d_size)
 , d_length(rel.d_length)
-, d_rel_p(alloc(rel.d_size))
 { 
     copy(d_rel_p, rel.d_rel_p, d_size);
 }

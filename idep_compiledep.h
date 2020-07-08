@@ -94,7 +94,7 @@ class idep_RootFileIter {
     ~idep_RootFileIter();
 
     // MANIPULATORS
-    void operator++(); 
+    idep_RootFileIter& operator++(); 
 
     // ACCESSORS
     operator const void *() const; 
@@ -116,7 +116,7 @@ class idep_HeaderFileIter {
     ~idep_HeaderFileIter();
 
     // MANIPULATORS
-    void operator++(); 
+    idep_HeaderFileIter& operator++(); 
 
     // ACCESSORS
     operator const void *() const; 

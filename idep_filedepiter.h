@@ -29,7 +29,7 @@ class idep_FileDepIter {
     void reset();
         // Return to the first dependency in the file (if one exists).
 
-    void operator++();
+    idep_FileDepIter& operator++();
         // Advance to next dependency in the file.  The behavior of this 
         // function is undefined if the iteration state is invalid. 
 

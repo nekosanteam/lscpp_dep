@@ -115,7 +115,6 @@ int idep_AliasUtil::readAliases(idep_AliasTable *table, ostream& orr,
 
     idep_String componentName = EMPTY_NAME;
     idep_String lastToken = EMPTY_NAME;
-    Input lastInput = IDENT;
 
     for (idep_TokenIter it(in); it; ++it) {
         if (*it() == COMMENT_CHAR) {
@@ -192,7 +191,6 @@ int idep_AliasUtil::readAliases(idep_AliasTable *table, ostream& orr,
         }
         
         lastToken = it();
-        lastInput = input;
 
         state = nextStateTable[state][input];
     }

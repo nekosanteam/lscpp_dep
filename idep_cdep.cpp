@@ -182,10 +182,14 @@ struct idep_CompileDep_i {
 
     idep_CompileDep_i();
     ~idep_CompileDep_i();
+    idep_CompileDep_i(const idep_CompileDep_i&) = delete;
+    idep_CompileDep_i& operator=(const idep_CompileDep_i&) = delete;
 };
 
 idep_CompileDep_i::idep_CompileDep_i() 
-: d_fileNames_p(0)
+: d_includeDirectories(0)
+, d_rootFiles(0)
+, d_fileNames_p(0)
 , d_dependencies_p(0)
 , d_numRootFiles(-1)
 {
@@ -368,10 +372,11 @@ idep_RootFileIter::~idep_RootFileIter()
     delete d_this;
 }
 
-void idep_RootFileIter::operator++() 
+idep_RootFileIter& idep_RootFileIter::operator++() 
 {
     assert(*this);
     ++d_this->d_index;
+    return *this;
 }
  
 idep_RootFileIter::operator const void *() const
@@ -413,7 +418,7 @@ idep_HeaderFileIter::~idep_HeaderFileIter()
 }
 
 
-void idep_HeaderFileIter::operator++() 
+idep_HeaderFileIter& idep_HeaderFileIter::operator++() 
 {
     assert(*this);
     idep_BinRel *rel = d_this->d_iter.d_dep.d_dependencies_p;
@@ -424,6 +429,7 @@ void idep_HeaderFileIter::operator++()
     while (   d_this->d_index < rel->length() 
            && !rel->get(d_this->d_iter.d_index, d_this->d_index)
     );
+    return *this;
 }
  
 idep_HeaderFileIter::operator const void *() const

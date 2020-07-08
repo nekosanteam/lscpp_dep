@@ -129,6 +129,8 @@ struct idep_LinkDep_i {
 
     idep_LinkDep_i();
     ~idep_LinkDep_i();
+    idep_LinkDep_i(const idep_LinkDep_i&) = delete;
+    idep_LinkDep_i& operator=(const idep_LinkDep_i&) = delete;
 
     int entry(const char *name, int suffixFlag);
     void loadDependencies(istream& in, int suffixFlag);
@@ -137,7 +139,10 @@ struct idep_LinkDep_i {
 };
 
 idep_LinkDep_i::idep_LinkDep_i() 
-: d_componentNames_p(0)
+: d_unaliases(0)
+, d_aliases(0)
+, d_dependencyFiles(0)
+, d_componentNames_p(0)
 , d_dependencies_p(0)
 , d_map_p(0)
 , d_levels_p(0)
@@ -625,9 +630,9 @@ int idep_LinkDep_i::calculate(ostream& orr, int canonicalFlag, int suffixFlag)
             for (int j = start; j < i; ++j) {
                 int ci = d_cycleIndices_p[d_map_p[i]];
                 int cj = d_cycleIndices_p[d_map_p[j]];
-                if (ci < cj || ci == cj &&
-                               strcmp((*d_componentNames_p)[d_map_p[i]],
-                                      (*d_componentNames_p)[d_map_p[j]]) < 0) {
+                if (ci < cj || (ci == cj &&
+                                strcmp((*d_componentNames_p)[d_map_p[i]],
+                                       (*d_componentNames_p)[d_map_p[j]]) < 0)) {
                     int tmp = d_map_p[i];
                     d_map_p[i] = d_map_p[j];
                     d_map_p[j] = tmp;
@@ -978,8 +983,8 @@ void idep_LinkDep::printSummary(ostream& o) const
 {
     //long iostate = o.setf(ios::left, ios::adjustfield);
     std::ios_base::fmtflags iostate = o.setf(std::ios::left, std::ios::adjustfield);
-    const int FIELD_BUFFER_SIZE = 100;   // Not completely arbitrary -- this
-    char field[FIELD_BUFFER_SIZE];       // size will be always big enough!
+    //const int FIELD_BUFFER_SIZE = 100;   // Not completely arbitrary -- this
+    //char field[FIELD_BUFFER_SIZE];       // size will be always big enough!
     o << "SUMMARY:" << endl;
 
     const int N = 12;           // width of number field
@@ -1101,9 +1106,10 @@ idep_AliasIter::~idep_AliasIter()
     delete d_this;
 }
 
-void idep_AliasIter::operator++() 
+idep_AliasIter& idep_AliasIter::operator++() 
 {
     ++d_this->d_iter;
+    return *this;
 }
  
 idep_AliasIter::operator const void *() const
@@ -1149,10 +1155,11 @@ idep_UnaliasIter::~idep_UnaliasIter()
 }
 
 
-void idep_UnaliasIter::operator++() 
+idep_UnaliasIter& idep_UnaliasIter::operator++() 
 {
     assert (*this);
     ++d_this->d_index;
+    return *this;
 }
  
 idep_UnaliasIter::operator const void *() const
@@ -1177,8 +1184,8 @@ struct idep_CycleIter_i {
 
 idep_CycleIter_i::idep_CycleIter_i(const idep_LinkDep_i& dep)
 : d_dep(dep)
-, d_componentIndex(-1)
 , d_cycleIndex(-1)
+, d_componentIndex(-1)
 {
 }
 
@@ -1195,7 +1202,7 @@ idep_CycleIter::~idep_CycleIter()
     delete d_this;
 }
 
-void idep_CycleIter::operator++() 
+idep_CycleIter& idep_CycleIter::operator++() 
 {
     assert(*this);
     ++d_this->d_cycleIndex;
@@ -1204,6 +1211,7 @@ void idep_CycleIter::operator++()
     } 
     while (*this && d_this->d_dep.d_cycleIndices_p[d_this->d_dep.d_map_p[
                         d_this->d_componentIndex]] != d_this->d_cycleIndex);
+    return *this;
 }
  
 idep_CycleIter::operator const void *() const
@@ -1251,7 +1259,7 @@ idep_MemberIter::~idep_MemberIter()
     delete d_this;
 }
 
-void idep_MemberIter::operator++() 
+idep_MemberIter& idep_MemberIter::operator++() 
 {
     assert(*this);
     do {
@@ -1259,6 +1267,7 @@ void idep_MemberIter::operator++()
     } 
     while (*this && d_this->d_dep.d_cycleIndices_p[d_this->d_dep.d_map_p[
                                 d_this->d_index]] != d_this->d_cycleIndex);
+    return *this;
 }
  
 idep_MemberIter::operator const void *() const
@@ -1301,10 +1310,11 @@ idep_LevelIter::~idep_LevelIter()
     delete d_this;
 }
 
-void idep_LevelIter::operator++() 
+idep_LevelIter& idep_LevelIter::operator++() 
 {
     assert(*this);
     d_this->d_start += d_this->d_dep.d_levels_p[d_this->d_level++];
+    return *this;
 }
  
 idep_LevelIter::operator const void *() const
@@ -1347,10 +1357,11 @@ idep_ComponentIter::~idep_ComponentIter()
     delete d_this;
 }
 
-void idep_ComponentIter::operator++() 
+idep_ComponentIter& idep_ComponentIter::operator++() 
 {
     assert(*this);
     ++d_this->d_index;
+    return *this;
 }
  
 idep_ComponentIter::operator const void *() const
@@ -1401,7 +1412,7 @@ idep_DependencyIter::~idep_DependencyIter()
 }
 
 
-void idep_DependencyIter::operator++() 
+idep_DependencyIter& idep_DependencyIter::operator++() 
 {
     assert(*this);
     do {
@@ -1410,6 +1421,7 @@ void idep_DependencyIter::operator++()
     while (*this &&                             // look in levelized order
            !d_this->d_dep.d_dependencies_p->get(d_this->d_row, 
                                 d_this->d_dep.d_map_p[d_this->d_col])); 
+    return *this;
 }
  
 idep_DependencyIter::operator const void *() const

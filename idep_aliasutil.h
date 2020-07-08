@@ -43,7 +43,7 @@ struct idep_AliasUtil {
         //
         //   o                          
         //   p q                        # p -> o; q -> o
-        //   \ # just a comment \       
+        //   \ # just a comment    \{backslash}    
         //   r                          # r -> o
         //
         //   s t \                      # t -> s

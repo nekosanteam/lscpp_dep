@@ -25,7 +25,8 @@ static char *newStrCpy(const char *oldStr)
                 // -*-*-*- idep_NameArray -*-*-*-
  
 idep_NameArray::idep_NameArray(int maxEntriesHint)
-: d_size(maxEntriesHint > 0 ? maxEntriesHint : START_SIZE)
+: d_array_p(nullptr)
+, d_size(maxEntriesHint > 0 ? maxEntriesHint : START_SIZE)
 , d_length(0)
 {
     d_array_p = new char *[d_size];
@@ -63,7 +64,7 @@ const char *idep_NameArray::operator[] (int i) const
 int idep_NameArray::length() const
 {
     return d_length;
-};
+}
 
 ostream& operator<<(ostream& out, const idep_NameArray& array) 
 {

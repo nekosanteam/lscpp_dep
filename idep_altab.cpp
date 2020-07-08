@@ -40,6 +40,8 @@ struct idep_AliasTableLink {
     idep_AliasTableLink(const char *alias, const char *orignalName, 
                                                 idep_AliasTableLink *next);
     ~idep_AliasTableLink();
+    idep_AliasTableLink(const idep_AliasTableLink&) = delete;
+    idep_AliasTableLink& operator=(const idep_AliasTableLink&) = delete;
 };
 
 idep_AliasTableLink::idep_AliasTableLink(const char *alias, 
@@ -60,12 +62,13 @@ idep_AliasTableLink::~idep_AliasTableLink()
 
 
 idep_AliasTable::idep_AliasTable(int size) 
-: d_size(size > 0 ? size : DEFAULT_TABLE_SIZE)
+: d_table_p(nullptr)
+, d_size(size > 0 ? size : DEFAULT_TABLE_SIZE)
 {
     d_table_p = new idep_AliasTableLink *[d_size];
     assert (d_table_p);
     memset (d_table_p, 0, d_size * sizeof *d_table_p);
-};
+}
 
 idep_AliasTable::~idep_AliasTable() 
 {
@@ -132,6 +135,8 @@ ostream& operator<<(ostream &o, const idep_AliasTable& table)
 
 idep_AliasTableIter::idep_AliasTableIter(const idep_AliasTable& t) 
 : d_table(t)
+, d_link_p(nullptr)
+, d_index(0)
 {
     reset();
 }
@@ -147,7 +152,7 @@ void idep_AliasTableIter::reset()
     ++*this;
 }
 
-void idep_AliasTableIter::operator++() 
+idep_AliasTableIter& idep_AliasTableIter::operator++() 
 { 
     if (d_link_p) {
         d_link_p = d_link_p->d_next_p;
@@ -157,7 +162,8 @@ void idep_AliasTableIter::operator++()
         if (*this) {
             d_link_p = d_table.d_table_p[d_index]; 
         }
-    }    
+    }
+    return *this;
 }    
 
 idep_AliasTableIter::operator const void *() const 
